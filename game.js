@@ -1,12 +1,13 @@
 "use strict"; 
    //////////////// Import ////////////////////////////////////////////////////
-const Player = require('./classes/player');
-
+const Player = require('./classes/player'); 
+const Ai = require('./classes/ai');
+const prompt = require('prompt-sync')();
 
 class Game {
     constructor() { 
         this.playerOne = new Player;
-        this.playerTwo = new Player;
+        this.playerTwo = new Ai;
         
      
     } 
@@ -16,7 +17,9 @@ class Game {
       
         this.displayRules();
         this.playerOne.showOptions(); 
-        
+        let index = parseInt(prompt("Pick gesture: "));
+        console.log("you picked: "+ this.playerOne.pickGesture(index));
+        console.log("playerTwo picked: "+ this.playerTwo.pickGesture());
 
     }
    ////////////////////////////////////////////////////////////////////////////

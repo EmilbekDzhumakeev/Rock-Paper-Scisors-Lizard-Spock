@@ -10,7 +10,7 @@ class Player {
 
   } 
   pickGesture(index){
-    let hand = this.gesture[index+1];
+    let hand = this.gesture[index-1];
      return hand;
   }
     
