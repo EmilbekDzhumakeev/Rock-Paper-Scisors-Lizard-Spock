@@ -6,12 +6,12 @@ const Human = require('./classes/human');
 const prompt = require('prompt-sync')();
 
 class Game {
-    constructor() { 
-        this.playerOne = new Player;
-        this.playerTwo = new Ai; 
-        this.playerThree = new Human;
-        let p1, p2 = 0;
+    constructor() {  
 
+        this.playerOne = new Human;
+        this.playerTwo = new  Ai;
+      
+   
      
     } 
 
@@ -20,10 +20,11 @@ class Game {
       
         this.displayRules();
         this.playerOne.showOptions(); 
-        this.playAi(); 
-
-        this.playHuman();
-
+        this.whichGameMode();
+        // this.playAi(); 
+        //this.playHuman();
+        this.displayGameWinner();
+       
     }
    ////////////////////////////////////////////////////////////////////////////
     displayRules() { 
@@ -34,92 +35,150 @@ class Game {
     
     }
    ////////////////////////////////////////////////////////////////////////////
-    displayGameWinner(counter) {  
-        let p1, p2;
-        if (counter === "oneCounter"){
-                p1++;
-        } else {p2++;} 
-
-        if (p1 === 3){
-            console.log("Player One won the game! ");
-            return "gameOver";
-        } else if (p2 === 3){
-            console.log("Player Two won the game! ");
-            return "gameOver";
-        }
-     
+    displayGameWinner() {  
+        if (this.playerOne.score > this.playerTwo.score){
+            console.log("\nPlayer One won the GAME!");
+        } else console.log("\nPlayer Two won the GAME!");
+        
   }
  ////////////////////////////////////////////////////////////////////////////
  playAi(){   
-     let round;
-   while (round!=="gameOver"){
-     let index = parseInt(prompt("Player One Pick gesture: ")); 
-     let hand1 = this.playerOne.pickGesture(index);
-     let hand2 = this.playerTwo.pickGesture();
-     console.log("Player one picked: "+ hand1);
-     console.log("Ai picked: "+ hand2);
-    round = this.displayGameWinner(this.whoWon(hand1, hand2)); 
+    
+   while (this.playerTwo.score < 3 && this.playerOne.score < 3){
+     let index = parseInt(prompt("\nPlayer One Pick gesture: ")); 
+    this.playerOne.pickGesture(index); 
+    this.playerTwo.pickGesture();
+     console.log("Player One picked: "+ this.playerOne.gestureChoice);
+     console.log("Player Two (Ai) picked: "+ this.playerTwo.gestureChoice);
+    this.whoWon(this.playerOne.gestureChoice, this.playerTwo.gestureChoice);  
+
+    console.log("Player One score: "+ this.playerOne.score);
+    console.log("Player Two score: "+ this.playerTwo.score);
+
  }
  }
  
  ///////////////////////////////////////////////////////////////////////////
- playHuman(){
-    let index = parseInt(prompt("Player One Pick gesture: "));
+ playHuman(){ 
+    this.playerTwo = new Human; 
+    console.log("Player One score: "+ this.playerOne.score);
+    console.log("Player Two score: "+ this.playerTwo.score);  
+
+    while (this.playerTwo.score < 3 && this.playerOne.score < 3){
+    let index = parseInt(prompt("\nPlayer One Pick gesture: "));
     let index2 = parseInt(prompt("Player Two Pick gesture: ")); 
-    let hand1 = this.playerOne.pickGesture(index);
-    let hand2 = this.playerThree.pickGesture(index2);
-    console.log("Player one picked: "+ hand1); 
-    console.log("Player two picked: "+ hand2);
+    this.playerOne.pickGesture(index);
+    this.playerTwo.pickGesture(index2);
+    console.log("Player one picked: "+ this.playerOne.gestureChoice); 
+    console.log("Player two picked: "+ this.playerTwo.gestureChoice);
+    this.whoWon(this.playerOne.gestureChoice, this.playerTwo.gestureChoice);  
+
+    console.log("Player One score: "+ this.playerOne.score);
+    console.log("Player Two score: "+ this.playerTwo.score); 
+} 
 }
 ///////////////////////////////////////////////////////////////////////////
 whoWon(hand1,hand2){  
-   // while (oneCounter < 4 || twoCounter < 4){
+
     if (hand1 === hand2){
         console.log("Its a tie!");
     } else if (hand1==="Rock" && hand2==="Scissors"){
         console.log("Rock crushes Scissors ");
-        console.log("Player One won !"); 
-        return "oneCounter";
+        console.log("Player One won !");   
+        this.playerOne.score++;  
     } else if (hand1==="Scissors" && hand2==="Paper"){
         console.log("Scissors cuts Paper");
         console.log("Player One won !"); 
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Paper" && hand2==="Rock"){
         console.log("Paper covers Rock");
         console.log("Player One won !");
-        return  "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Rock" && hand2==="Lizard"){
         console.log("Rock crushes Lizard");
         console.log("Player One won !");
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Lizard" && hand2==="Spock"){
         console.log("Rock crushes Lizard");
         console.log("Player One won !");
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Spock" && hand2==="Scissors"){
         console.log("Spock smashes Scissors ");
         console.log("Player One won !"); 
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Scissors" && hand2==="Lizard"){
         console.log("Scissors decapitates Lizard");
         console.log("Player One won !"); 
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Lizard" && hand2==="Paper"){
         console.log("Lizard eats Paper ");
         console.log("Player One won !");
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Paper" && hand2==="Spock"){
         console.log("Paper disproves Spock");
         console.log("Player One won !");
-        return "oneCounter";
+        this.playerOne.score++;  
     } else if (hand1==="Spock" && hand2==="Rock"){
         console.log("Spock vaporizes Rock ");  
         console.log("Player One won !");
-        return "oneCounter";
-    } else {console.log("Player Two won !");
-        return "twoCounter";}
+        this.playerOne.score++;  
+    } 
+    ///////////////////////////// reverse  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+   
+ else if (hand2==="Rock" && hand1==="Scissors"){
+    console.log("Rock crushes Scissors ");
+    console.log("Player Two won !");   
+    this.playerTwo.score++;  
+} else if (hand2==="Scissors" && hand1==="Paper"){
+    console.log("Scissors cuts Paper");
+    console.log("Player Two won !");  
+    this.playerTwo.score++;  
+} else if (hand2==="Paper" && hand1==="Rock"){
+    console.log("Paper covers Rock");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Rock" && hand1==="Lizard"){
+    console.log("Rock crushes Lizard");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Lizard" && hand1==="Spock"){
+    console.log("Rock crushes Lizard");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Spock" && hand1==="Scissors"){
+    console.log("Spock smashes Scissors ");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Scissors" && hand1==="Lizard"){
+    console.log("Scissors decapitates Lizard");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Lizard" && hand1==="Paper"){
+    console.log("Lizard eats Paper ");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Paper" && hand1==="Spock"){
+    console.log("Paper disproves Spock");
+    console.log("Player Two won !"); 
+    this.playerTwo.score++;  
+} else if (hand2==="Spock" && hand1==="Rock"){
+    console.log("Spock vaporizes Rock ");  
+    console.log("Player Two won !"); 
+    this.playerTwo.score++; 
+} 
 
 
+} 
+/////////////////////////////////////////////////////////////////////////// 
+whichGameMode(){  
+    let mode = prompt("Choose GAME Mode: 1-PLAY AI , 2-PLAY HUMAN: "); 
+    if (mode === "1"){
+        this.playAi();  
+        //return Ai;
+    } else if (mode === "2"){
+        this.playHuman();
+       // return Human;
+    } else {console.log("Invalide entry!");}
 
 }
 }
