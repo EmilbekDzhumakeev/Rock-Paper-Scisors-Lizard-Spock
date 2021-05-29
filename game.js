@@ -8,10 +8,10 @@ const prompt = require('prompt-sync')();
 class Game {
     constructor() {  
 
-        this.playerOne = new Human;
-        this.playerTwo = new  Ai;
+        this.playerOne = new Human();
+        this.playerTwo = new  Ai();
       
-   
+
      
     } 
 
@@ -45,7 +45,7 @@ class Game {
  playAi(){   
     
    while (this.playerTwo.score < 3 && this.playerOne.score < 3){
-     let index = parseInt(prompt("\nPlayer One Pick gesture: ")); 
+     let index = parseInt(this.promptFor("\nPlayer One Pick gesture: ", this.nums)); 
     this.playerOne.pickGesture(index); 
     this.playerTwo.pickGesture();
      console.log("Player One picked: "+ this.playerOne.gestureChoice);
@@ -60,13 +60,13 @@ class Game {
  
  ///////////////////////////////////////////////////////////////////////////
  playHuman(){ 
-    this.playerTwo = new Human; 
+    this.playerTwo = new Human(); 
     console.log("Player One score: "+ this.playerOne.score);
     console.log("Player Two score: "+ this.playerTwo.score);  
 
     while (this.playerTwo.score < 3 && this.playerOne.score < 3){
-    let index = parseInt(prompt("\nPlayer One Pick gesture: "));
-    let index2 = parseInt(prompt("Player Two Pick gesture: ")); 
+    let index = parseInt(this.promptFor("\nPlayer One Pick gesture: ", this.nums));
+    let index2 = parseInt(this.promptFor("Player Two Pick gesture: ", this.nums)); 
     this.playerOne.pickGesture(index);
     this.playerTwo.pickGesture(index2);
     console.log("Player one picked: "+ this.playerOne.gestureChoice); 
@@ -170,17 +170,35 @@ whoWon(hand1,hand2){
 
 } 
 /////////////////////////////////////////////////////////////////////////// 
-whichGameMode(){  
-    let mode = prompt("Choose GAME Mode: 1-PLAY AI , 2-PLAY HUMAN: "); 
+whichGameMode(){   
+    let mode;
+    do {
+    mode = this.promptFor("Choose GAME Mode: 1-PLAY AI , 2-PLAY HUMAN: ", this.nums ); 
+    if (mode > 2){console.log("Invalid entry try again!");}
+    } while (mode !== "1" && mode !== "2");
     if (mode === "1"){
         this.playAi();  
-        //return Ai;
     } else if (mode === "2"){
         this.playHuman();
-       // return Human;
-    } else {console.log("Invalide entry!");}
-
+    } 
+    
 }
+///////////////////////////////////////////////////////////////////////////
+// function that prompts and validates user input
+promptFor(question, valid){
+    do{
+      var response = prompt(question).trim();
+    } while(!response || !valid(response));
+    return response;
+  }
+  // helper function to pass in as default promptFor validation
+ nums(input){
+     if (input === "1" || input === "2" || input === "3" || input === "4" || input === "5"){
+    return true; }// default validation only
+    else {
+        console.log("Invalid entry try again!")
+        return false;}
+  }
 }
  
 module.exports = Game
